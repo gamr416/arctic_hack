@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Мусорное течение: от Северной Двины до Белого моря</title>
+    <meta
+      name="description"
+      content="Интерактивный лендинг о пути мусора от Северной Двины до Белого моря: карта, галерея находок, квиз и практические рекомендации."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Manrope:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="#hero">Мусорное течение</a>
+        <nav aria-label="Основная навигация">
+          <ul class="nav-list">
+            <li><a href="#global">Проблема</a></li>
+            <li><a href="#white-sea">Белое море</a></li>
+            <li><a href="#map-section">Карта</a></li>
+            <li><a href="#gallery">Галерея</a></li>
+            <li><a href="#game">Игра</a></li>
+            <li><a href="#actions">Что делать</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+          <div class="hero-text">
+            <p class="eyebrow">Исследование мусора в Арктическом регионе</p>
+            <h1>Мусорное течение: от Северной Двины до Белого моря</h1>
+            <p class="hero-fact">
+              Каждый час в Белое море попадает <strong>3 000 частиц пластика</strong> (источник:
+              plus-one.ru)
+            </p>
+            <a
+              class="btn btn-primary"
+              href="https://plus-one.ru/news/2023/03/16/v-beloe-more-kazhdyy-chas-vlivaetsya-okolo-3-tys-chastic-plastika"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Узнать, как это связано со мной
+            </a>
+          </div>
+          <img
+            class="hero-side-image"
+            src="assets/images/bg.jpg"
+            alt="Побережье Белого моря и карта загрязнения"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <section id="global" class="section">
+        <div class="container">
+          <h2>Глобальная проблема</h2>
+          <p class="section-lead" id="global-description"></p>
+          <div class="global-grid">
+            <div class="compare-card">
+              <p class="compare-label">Сравнение масштаба</p>
+              <input
+                id="scale-slider"
+                type="range"
+                min="0"
+                max="100"
+                value="65"
+                aria-label="Слайдер сравнения масштаба загрязнения"
+              />
+              <div class="compare-track">
+                <div class="compare-before">До</div>
+                <div class="compare-after" id="compare-after">После</div>
+              </div>
+            </div>
+            <div class="fact-card">
+              <h3>Факт BBC</h3>
+              <p id="bbc-fact"></p>
+              <canvas id="particles-canvas" width="400" height="220" aria-label="Анимация частиц пластика"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="white-sea" class="section section-alt">
+        <div class="container">
+          <h2>Белое море: локальные данные</h2>
+          <div class="stats-grid" id="stats-grid"></div>
+          <div class="composition-wrap">
+            <h3>Состав найденного мусора</h3>
+            <img
+              class="composition-image"
+              src="assets/images/infografic.png"
+              alt="Инфографика морфологического состава обнаруженных фрагментов мусора"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="map-section" class="section">
+        <div class="container">
+          <h2>Интерактивная карта пути мусора</h2>
+          <p class="section-lead">
+            Нажмите на источники загрязнения и точки уборок, включайте слои и запускайте движение частиц.
+          </p>
+          <div class="controls">
+            <fieldset>
+              <legend>Слои карты</legend>
+              <label><input type="checkbox" data-layer="sources" checked /> Источники</label>
+              <label><input type="checkbox" data-layer="cleanups" checked /> Точки уборок</label>
+            </fieldset>
+            <fieldset>
+              <legend>Тип следа</legend>
+              <label><input type="radio" name="particle" value="bottle" checked /> Бутылка</label>
+              <label><input type="radio" name="particle" value="bag" /> Пакет</label>
+              <label><input type="radio" name="particle" value="net" /> Сеть</label>
+            </fieldset>
+            <button class="btn" id="animate-btn">Показать путь</button>
+          </div>
+          <div class="map-wrap">
+            <div id="map" role="application" aria-label="Карта Белого моря"></div>
+            <canvas id="map-canvas" aria-hidden="true"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="section section-alt">
+        <div class="container">
+          <h2>Галерея находок</h2>
+          <div class="filter-row" id="gallery-filters"></div>
+          <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+      </section>
+
+      <section id="game" class="section">
+        <div class="container">
+          <h2>Игра: Очисти побережье</h2>
+          <p class="section-lead">Перетащи предмет в правильный контейнер, чтобы очистить берег и узнать факт о находке.</p>
+          <div class="game-head">
+            <p id="game-score" class="game-score">Очки: 0 | Ошибки: 0</p>
+            <p id="game-message" class="game-message" aria-live="polite">Перетащи мусор в нужный контейнер.</p>
+            <button id="game-start" class="btn btn-primary">Начать игру</button>
+          </div>
+          <div id="game-area" class="game-area" aria-label="Игровое поле">
+            <div id="game-item-layer" class="game-item-layer"></div>
+          </div>
+          <div id="game-bins" class="game-bins" aria-label="Контейнеры сортировки"></div>
+          <div id="game-education" class="game-education" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+      <section id="actions" class="section section-alt">
+        <div class="container">
+          <h2>Что делать уже сегодня</h2>
+          <div class="volunteer-box">
+            <a class="btn btn-primary" id="volunteer-btn" href="#map-section">Стать волонтером</a>
+            <img
+              class="volunteer-image"
+              src="assets/images/volunteers.jpg"
+              alt="Команда волонтеров после уборки мусора на побережье"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>Проект для экопросвещения школьников Архангельской области.</p>
+        <p>
+          Источники: ecosphere.press, BBC News, plus-one.ru, semnasem.org, kenozero.ru, pomormap.ru,
+          maps29.ru.
+        </p>
+        <p>&copy; 2026 Мусорное течение</p>
+      </div>
+    </footer>
+
+    <div class="modal" id="item-modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-overlay" data-modal-close="true"></div>
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close" aria-label="Закрыть окно">&times;</button>
+        <img id="modal-image" alt="" />
+        <h3 id="modal-title"></h3>
+        <p><strong>Материал:</strong> <span id="modal-material"></span></p>
+        <p><strong>Причина попадания:</strong> <span id="modal-reason"></span></p>
+        <p id="modal-details"></p>
+      </div>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
