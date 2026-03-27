@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Мусорное течение: от Северной Двины до Белого моря</title>
+    <title>Мусорный дрейф: от Северной Двины до побережья Онежского Поморья</title>
     <meta
       name="description"
-      content="Интерактивный лендинг о пути мусора от Северной Двины до Белого моря: карта, галерея находок, квиз и практические рекомендации."
+      content="Интерактивный лендинг о путях мусора в Онежском Поморье: карта, галерея находок и практические рекомендации."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,14 +18,14 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
+      crossorigin=""`
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a class="brand" href="#hero">Мусорное течение</a>
+        <a class="brand" href="#hero">Мусорный дрейф</a>
         <nav aria-label="Основная навигация">
           <ul class="nav-list">
             <li><a href="#global">Проблема</a></li>
@@ -44,8 +44,13 @@
         <div class="hero-overlay"></div>
         <div class="container hero-content">
           <div class="hero-text">
-            <p class="eyebrow">Исследование мусора в Арктическом регионе</p>
-            <h1>Мусорное течение: от Северной Двины до Белого моря</h1>
+            <p class="eyebrow">Исследование мусора в Онежском Поморье</p>
+            <h1>Мусорный дрейф: от Северной Двины до побережья Онежского Поморья</h1>
+            <p class="hero-description">
+              Национальный парк «Онежское Поморье» — уникальная охраняемая территория с богатым морским наследием. 
+              Однако в последние годы берега сталкиваются с растущей проблемой пластикового загрязнения, 
+              приносимого течениями из рек и населённых пунктов.
+            </p>
             <p class="hero-fact">
               Каждый час в Белое море попадает <strong>3 000 частиц пластика</strong> (источник:
               plus-one.ru)
@@ -62,7 +67,7 @@
           <img
             class="hero-side-image"
             src="assets/images/bg.jpg"
-            alt="Побережье Белого моря и карта загрязнения"
+            alt="Побережье Онежского Поморья и карта загрязнения"
             loading="lazy"
           />
         </div>
@@ -70,27 +75,18 @@
 
       <section id="global" class="section">
         <div class="container">
-          <h2>Глобальная проблема</h2>
-          <p class="section-lead" id="global-description"></p>
+          <h2>Глобальное пластиковое загрязнение</h2>
+          <p class="section-lead">
+            Мировой океан сталкивается с беспрецедентным загрязнением пластиком. 
+            В Тихом океане сформировалось огромное мусорное пятно — скопление отходов, 
+            которое по площади превышает многие страны мира. Течения разносят пластик по всем океанам, 
+            включая арктические воды.
+          </p>
           <div class="global-grid">
-            <div class="compare-card">
-              <p class="compare-label">Сравнение масштаба</p>
-              <input
-                id="scale-slider"
-                type="range"
-                min="0"
-                max="100"
-                value="65"
-                aria-label="Слайдер сравнения масштаба загрязнения"
-              />
-              <div class="compare-track">
-                <div class="compare-before">До</div>
-                <div class="compare-after" id="compare-after">После</div>
-              </div>
-            </div>
             <div class="fact-card">
-              <h3>Факт BBC</h3>
-              <p id="bbc-fact"></p>
+              <h3>Научный факт</h3>
+              <p>23 кусочка пластика достаточно, чтобы с вероятностью 90% убить морскую птицу. 
+              Исследование опубликовано в научном журнале.</p>
               <canvas id="particles-canvas" width="400" height="220" aria-label="Анимация частиц пластика"></canvas>
             </div>
           </div>
@@ -99,10 +95,16 @@
 
       <section id="white-sea" class="section section-alt">
         <div class="container">
-          <h2>Белое море: локальные данные</h2>
+          <h2>Масштаб проблемы мусора в Белом море</h2>
+          <p class="section-lead">
+            Белое море — уникальный северный водоём, который ежегодно принимает тысячи тонн мусора 
+            из рек, прибрежных городов и рыболовных промыслов. Проблема особенно остра в период 
+            весеннего паводка и штормов, когда на берег выносит накопившийся за год мусор.
+          </p>
           <div class="stats-grid" id="stats-grid"></div>
           <div class="composition-wrap">
             <h3>Состав найденного мусора</h3>
+            <p class="composition-note">Данные основаны на полевых исследованиях побережья Онежского Поморья.</p>
             <img
               class="composition-image"
               src="assets/images/infografic.png"
@@ -114,34 +116,23 @@
 
       <section id="map-section" class="section">
         <div class="container">
-          <h2>Интерактивная карта пути мусора</h2>
+          <h2>Карта территории</h2>
           <p class="section-lead">
-            Нажмите на источники загрязнения и точки уборок, включайте слои и запускайте движение частиц.
+            Нажмите на точки, чтобы увидеть подробную информацию о местах и найденном мусоре.
           </p>
-          <div class="controls">
-            <fieldset>
-              <legend>Слои карты</legend>
-              <label><input type="checkbox" data-layer="sources" checked /> Источники</label>
-              <label><input type="checkbox" data-layer="cleanups" checked /> Точки уборок</label>
-            </fieldset>
-            <fieldset>
-              <legend>Тип следа</legend>
-              <label><input type="radio" name="particle" value="bottle" checked /> Бутылка</label>
-              <label><input type="radio" name="particle" value="bag" /> Пакет</label>
-              <label><input type="radio" name="particle" value="net" /> Сеть</label>
-            </fieldset>
-            <button class="btn" id="animate-btn">Показать путь</button>
-          </div>
           <div class="map-wrap">
-            <div id="map" role="application" aria-label="Карта Белого моря"></div>
-            <canvas id="map-canvas" aria-hidden="true"></canvas>
+            <div id="map" role="application" aria-label="Карта Онежского Поморья"></div>
           </div>
         </div>
       </section>
 
       <section id="gallery" class="section section-alt">
         <div class="container">
-          <h2>Галерея находок</h2>
+          <h2>Галерея необычных находок</h2>
+          <p class="section-lead">
+            Волонтёры и исследователи находили на берегах Онежского Поморья самые разные предметы — 
+            от бытового мусора до неожиданных артефактов. Вот некоторые из наиболее интересных находок.
+          </p>
           <div class="filter-row" id="gallery-filters"></div>
           <div class="gallery-grid" id="gallery-grid"></div>
         </div>
@@ -167,12 +158,38 @@
       <section id="actions" class="section section-alt">
         <div class="container">
           <h2>Что делать уже сегодня</h2>
+          <p class="section-lead">
+            Каждый из нас может помочь сохранить чистоту побережья. Вот простые правила, 
+            которые легко ввести в привычку.
+          </p>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="tip-icon">🏖️</span>
+              <h4>Отдыхая на берегу</h4>
+              <p>Не забудь забрать свой мусор с собой. Даже маленький пакет может провести в природе сотни лет.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-icon">👀</span>
+              <h4>Увидел мусор — убери</h4>
+              <p>Замеченный на побережье забытый мусор забери с собой. Один человек может сделать многое.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-icon">♻️</span>
+              <h4>Отправь мусор на переработку</h4>
+              <p>Сортируй отходы и сдавай вторсырьё. Пластик, стекло и металл могут получить вторую жизнь.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-icon">🌿</span>
+              <h4>Выбирай многоразовое</h4>
+              <p>Отдавай предпочтение многоразовым вещам вместо одноразовых. Это ключевой принцип Zero Waste.</p>
+            </div>
+          </div>
           <div class="volunteer-box">
-            <a class="btn btn-primary" id="volunteer-btn" href="#map-section">Стать волонтером</a>
+            <a class="btn btn-primary" id="volunteer-btn" href="#map-section">Стать волонтёром</a>
             <img
               class="volunteer-image"
               src="assets/images/volunteers.jpg"
-              alt="Команда волонтеров после уборки мусора на побережье"
+              alt="Команда волонтёров после уборки мусора на побережье"
               loading="lazy"
             />
           </div>
@@ -184,10 +201,10 @@
       <div class="container">
         <p>Проект для экопросвещения школьников Архангельской области.</p>
         <p>
-          Источники: ecosphere.press, BBC News, plus-one.ru, semnasem.org, kenozero.ru, pomormap.ru,
-          maps29.ru.
+          Источники: ecosphere.press, BBC News, plus-one.ru, Journal of Marine Science and Engineering,
+          экологическое движение 42, kenozero.ru, pomormap.ru, maps29.ru.
         </p>
-        <p>&copy; 2026 Мусорное течение</p>
+        <p>&copy; 2026 Мусорный дрейф</p>
       </div>
     </footer>
 

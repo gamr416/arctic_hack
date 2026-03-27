@@ -1,22 +1,11 @@
-import { GLOBAL_FACTS, STATS } from "./data.js";
+import { STATS } from "./data.js";
 import { initGallery } from "./gallery.js";
 import { initGame } from "./game.js";
-import { initMap, initMapControls } from "./map.js";
+import { initMap } from "./map.js";
 
 function initGlobalSection() {
-  const description = document.querySelector("#global-description");
-  const bbcFact = document.querySelector("#bbc-fact");
-  const slider = document.querySelector("#scale-slider");
-  const compareAfter = document.querySelector("#compare-after");
   const canvas = document.querySelector("#particles-canvas");
   const context = canvas?.getContext("2d");
-
-  if (description) description.textContent = GLOBAL_FACTS.description;
-  if (bbcFact) bbcFact.textContent = GLOBAL_FACTS.bbcFact;
-
-  slider?.addEventListener("input", () => {
-    compareAfter.style.width = `${slider.value}%`;
-  });
 
   if (!context || !canvas) return;
   const particles = Array.from({ length: 26 }, () => ({
@@ -92,20 +81,9 @@ function boot() {
   initGlobalSection();
   initStats();
   initMap();
-  initMapControls();
   const gameController = initGame();
   const openModal = setupModal();
   initGallery(openModal);
-
-  if (gameController) {
-    setTimeout(() => {
-      const gameSection = document.querySelector("#game");
-      if (gameSection) {
-        gameSection.scrollIntoView({ behavior: "smooth" });
-        setTimeout(() => gameController.start(), 800);
-      }
-    }, 1500);
-  }
 }
 
 document.addEventListener("DOMContentLoaded", boot);

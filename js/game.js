@@ -186,7 +186,13 @@ export function initGame() {
 
   document.addEventListener("keydown", (event) => {
     if (!active || !current) return;
-    const map = { "1": GAME_BINS[0].id, "2": GAME_BINS[1].id, "3": GAME_BINS[2].id, "4": GAME_BINS[3].id };
+    const map = { 
+      "1": GAME_BINS[0].id, 
+      "2": GAME_BINS[1].id, 
+      "3": GAME_BINS[2].id, 
+      "4": GAME_BINS[3].id,
+      "5": GAME_BINS[4].id 
+    };
     if (map[event.key]) {
       checkDrop(map[event.key]);
     }
