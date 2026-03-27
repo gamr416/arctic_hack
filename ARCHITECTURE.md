@@ -1,74 +1,318 @@
-# Detailed Architecture
+# Архитектура проекта "Мусорный дрейф"
 
-## Purpose
-Static single-page educational web app about marine litter flow from Northern Dvina to the White Sea.
+## Общее описание
 
-## Tech Stack
-- HTML5
-- CSS3 (mobile first)
-- JavaScript ES Modules
-- Leaflet.js (map)
+**Проект:** Интерактивный образовательный лендинг о путях мусора в Онежском Поморье
 
-## File Responsibilities
-- `index.html`: semantic sections, static placeholders, mount points for dynamic blocks
-- `css/style.css`: layout, theme, responsiveness, accessibility, modal visuals
-- `js/data.js`: centralized content and datasets (stats, gallery, map, game)
-- `js/main.js`: app bootstrap, reusable modal controls, global interactions
-- `js/map.js`: Leaflet setup (Carto Light), scripted location markers, layer toggles, canvas particle animation
-- `js/gallery.js`: gallery card rendering, filtering, item modal
-- `js/game.js`: game rendering, drag/touch/keyboard sorting logic, feedback and educational cards
-- `README.md`: run instructions, sources and attribution
+**Назначение:** Визуализация пути пластикового загрязнения от Северной Двины до берегов национального парка "Онежское Поморье", экопросвещение школьников Архангельской области
 
-## Runtime Data Flow
-1. `main.js` imports modules and starts feature initializers on `DOMContentLoaded`.
-2. `gallery.js`, `game.js`, `map.js` import constants from `data.js`.
-3. `main.js` fills static dynamic parts: global facts and stats cards.
-4. `gallery.js` renders cards and applies material filters, then delegates modal opening to callback from `main.js`.
-5. `game.js` creates bins/items, starts rounds, handles drag/drop + pointer + keyboard sorting and result states.
-6. `map.js` initializes Leaflet, creates marker layers from scripted `LOCATIONS`, binds detailed popups and type badges.
-7. `map.js` overlays `#map-canvas` and animates particles along simplified routes.
+**Заказчик:** Кенозерский национальный парк
 
-## Accessibility Baseline
-- Semantic landmarks
-- Keyboard focus styles
-- Modal close via `Esc` and overlay click
-- Alt texts for all images
+**Команда:** "Инженерность" (Санкт-Петербург)
 
-## Implemented Sections
-- Hero with CTA external article link and right-side image (`bg.jpg`)
-- Global problem with scale slider and canvas particle animation
-- White Sea statistics and infographic image (`infografic.png`)
-- Interactive map with layer toggles and animated particles
-- Gallery (8 required items) with modal details
-- Game section "Очисти побережье" with:
-  - Start/restart flow
-  - Wave-like item appearance
-  - Mouse/touch drag and drop
-  - Keyboard sorting shortcuts (1-4)
-  - Correct/wrong container feedback
-  - Educational card after each correct sort
-  - Final completion summary
-  - Monotone game field background (no photo in play area)
-- Volunteer CTA button and volunteer photo block
+**Тип:** Статический одностраничный веб-приложение (SPA без фреймворков)
 
-## Map Notes
-- Base layer switched to Carto Light (`light_all`) with `minZoom: 6` and `maxZoom: 13`
-- Marker categories:
-  - Sources: city, village, hotspot
-  - Cleanup/beach points: type `beach`
-- Popups include findings, pollution source, details and category badge
+---
 
-## Asset Strategy
-- Mixed local assets in `assets/images` (SVG placeholders + provided JPG/PNG photos)
-- No build pipeline required; files are directly loaded by browser
+## Технологический стек
 
-## Acceptance Mapping
-- Map interactivity: popups, layer toggles, animated paths
-- Gallery: grid, material filters, modal details
-- Game: item sorting by category with educational feedback cards
-- Recommendations: volunteer CTA with contextual image
-- Responsive behavior: mobile-first with `768px` and `1200px` breakpoints
+| Технология | Версия | Назначение |
+|------------|--------|------------|
+| HTML5 | — | Семантическая разметка |
+| CSS3 | — | Стилизация, адаптивность, анимации |
+| JavaScript | ES6+ (ES Modules) | Логика приложения |
+| Leaflet.js | 1.9.4 | Интерактивная карта |
+| Google Fonts | — | Типографика (Inter, Manrope) |
+| Python http.server | — | Локальный сервер для разработки |
 
-## Recent Fixes
-- Game start button wiring hardened with explicit click handlers and default prevention
-- Game layer z-index raised to ensure spawned items are visible above the field background
+---
+
+## Структура проекта
+
+```
+trash-current/
+├── index.html                  # Основная HTML-страница
+├── README.md                   # Инструкция по запуску
+├── ARCHITECTURE.md             # Техническая документация
+├── css/
+│   └── style.css               # Глобальные стили
+├── js/
+│   ├── main.js                 # Точка входа, инициализация
+│   ├── data.js                 # Централизованные данные
+│   ├── map.js                  # Логика карты Leaflet
+│   ├── gallery.js              # Галерея находок
+│   └── game.js                 # Игровая логика
+└── assets/
+    ├── images/                 # Изображения
+    │   ├── plastic_bottle.png
+    │   ├── polyethilen_bag.png
+    │   ├── flip-flop.png
+    │   ├── kids_toy.png
+    │   ├── liscense_plate.png
+    │   ├── bg.jpg
+    │   ├── infografic.png
+    │   ├── volunteers.jpg
+    │   └── hero-coast.svg
+    └── geojsons/               # Геоданные
+        ├── onezh_pomor_park.geojson
+        ├── key_ornithology_sites.geojson
+        └── pollution.geojson
+```
+
+---
+
+## Файловое описание
+
+### index.html
+
+Основная HTML-страница с семантической структурой:
+
+- **`<header>`** — навигация по секциям
+- **`<main>`** — основной контент:
+  - `#hero` — приветственный блок с заголовком и CTA
+  - `#global` — глобальная проблема пластикового загрязнения
+  - `#white-sea` — статистика и инфографика по Белому морю
+  - `#map-section` — интерактивная карта
+  - `#gallery` — галерея необычных находок
+  - `#game` — игра "Очисти побережье"
+  - `#actions` — что делать уже сегодня
+- **`<footer>`** — информация о проекте и команде
+- **`<modal>`** — модальное окно для просмотра деталей
+
+### css/style.css
+
+Глобальные стили包含:
+
+- **CSS Variables** — цветовая палитра (--bg, --surface, --accent, --good, --bad)
+- **Reset & Base** — сброс стилей, базовые настройки
+- **Layout** — сетка, контейнеры, отступы
+- **Components** — кнопки, карточки, модальные окна
+- **Sections** — стили для каждой секции
+- **Responsive** — медиа-запросы для mobile/tablet/desktop
+- **Animations** — анимации появления, shake, wave-in
+- **Accessibility** — фокус-стили, семантика
+
+### js/data.js
+
+Централизованное хранилище всех данных:
+
+- `STATS` — статистика по уборкам и загрязнению
+- `GALLERY_ITEMS` — данные для галереи (5 предметов)
+- `GAME_BINS` — категории контейнеров (4 штуки)
+- `GAME_ITEMS` — предметы для игры (5 штук)
+- `LOCATIONS` — точки на карте
+- `GLOBAL_FACTS` — глобальные факты о загрязнении
+- `MAP_CURRENTS`, `PARTICLE_PRESETS` — данные для анимации (не используются)
+
+### js/main.js
+
+Точка входа приложения:
+
+1. Импорт модулей (`data.js`, `gallery.js`, `game.js`, `map.js`)
+2. `initGlobalSection()` — инициализация глобальной секции (анимация частиц на canvas)
+3. `initStats()` — рендеринг карточек статистики
+4. `initMap()` — инициализация карты
+5. `initGame()` — инициализация игры
+6. `setupModal()` — настройка модального окна
+7. `initGallery()` — инициализация галереи
+8. Запуск на `DOMContentLoaded`
+
+### js/map.js
+
+Логика интерактивной карты:
+
+- Инициализация Leaflet с базовым слоем CartoDB Light
+- Загрузка GeoJSON слоёв:
+  - `onezh_pomor_park.geojson` — границы национального парка (синий слой)
+  - `key_ornithology_sites.geojson` — ключевые орнитологические территории (зелёный слой)
+  - `pollution.geojson` — зоны загрязнения (красный/оранжевый слой)
+- Добавление маркеров точек (🏙️ город, 🏖️ пляж, 📍 поселение)
+- Кастомные popup с информацией о каждой точке
+- Легенда карты в правом нижнем углу
+
+### js/gallery.js
+
+Галерея необычных находок:
+
+- Рендеринг карточек из `GALLERY_ITEMS`
+- Фильтрация по материалу (кнопки)
+- Открытие модального окна при клике на карточку
+- Поддержка клавиатурной навигации (Enter/Space)
+
+### js/game.js
+
+Игровая логика "Очисти побережье":
+
+- **Контейнеры:** 4 категории (мягкий пластик, твёрдый пластик, стекло/металл, резина)
+- **Предметы:** 5 видов мусора с изображениями
+- **Управление:**
+  - Drag-and-drop мышью
+  - Touch-события для мобильных
+  - Клавиши 1-4 для быстрой сортировки
+- **Механика:**
+  - Бесконечный режим (предметы перемешиваются при исчерпании)
+  - Счёт очков и ошибок
+  - Анимация правильного/неправильного ответа
+  - Образовательная карточка после каждого правильного ответа
+- **UI:** волны появления предметов, shake-анимация при ошибке
+
+---
+
+## Поток данных
+
+```
+Пользователь открывает страницу
+           ↓
+DOMContentLoaded → boot() в main.js
+           ↓
+    ┌──────┴──────┬──────────┬──────────┐
+    ↓             ↓           ↓           ↓
+initStats    initMap      initGame   setupModal
+    ↓             ↓           ↓           ↓
+Рендер       Leaflet     Инициали-   Обработчик
+статистики   карта       зация       открытия
+                         игры        модалки
+    ↓             ↓           ↓
+GALLERY_ITEMS  GeoJSON    GAME_ITEMS
+из data.js    загрузка   GAME_BINS
+    ↓             ↓           ↓
+initGallery   markers    start()
+ (фильтры)    popup'ы    (игра)
+```
+
+---
+
+## Секции сайта
+
+### 1. Hero (Приветствие)
+
+- Заголовок: "Мусорный дрейф: от Северной Двины до побережья Онежского Поморья"
+- Описание национального парка
+- Статистика: 3 000 частиц пластика в час
+- Кнопка с ссылкой на источник (plus-one.ru)
+- Изображение побережья
+
+### 2. Глобальное пластиковое загрязнение
+
+- Текст о мусорных пятнах в океанах
+- Научный факт о влиянии пластика на птиц
+- Canvas-анимация падающих частиц
+
+### 3. Масштаб проблемы в Белом море
+
+- 3 карточки статистики:
+  - 204 кг мусора за одну уборку
+  - 3 000 частиц/час
+  - 48% — пластик
+- Инфографика морфологического состава мусора
+
+### 4. Карта территории
+
+- Интерактивная карта Leaflet
+- Слои:
+  - Национальный парк "Онежское Поморье"
+  - Ключевые орнитологические территории
+  - Зоны загрязнения (высокий/низкий уровень)
+- Маркеры точек с popup-информацией
+- Легенда
+
+### 5. Галерея необычных находок
+
+- 5 карточек с изображениями
+- Фильтры по материалу
+- Модальное окно с детальной информацией
+
+### 6. Игра "Очисти побережье"
+
+- Кнопка "Начать игру"
+- Игровое поле с фоном побережья
+- 4 контейнера для сортировки
+- 5 видов предметов
+- Счёт: очки | ошибки
+- Образовательные карточки
+
+### 7. Что делать уже сегодня
+
+- 4 совета:
+  - Отдыхая на берегу
+  - Увидел мусор — убери
+  - Отправь мусор на переработку
+  - Выбирай многоразовое
+- Кнопка "Стать волонтёром" → ссылка на VK группы
+
+---
+
+## Адаптивность (Responsive)
+
+- **Mobile-first:** базовые стили для мобильных устройств
+- **Breakpoints:**
+  - `768px` — планшет (галерея 2 колонки, игра 2 колонки контейнеров)
+  - `1200px` — десктоп (галерея 4 колонки, игра 4 колонки контейнеров)
+
+---
+
+## Доступность (Accessibility)
+
+- Семантические HTML-теги (`nav`, `main`, `section`, `article`)
+- ARIA-атрибуты для интерактивных элементов
+- Клавиатурная навигация (Tab, Enter, Space, Escape)
+- Focus-стили для элементов управления
+- Alt-тексты для всех изображений
+- `aria-live` для динамического контента
+
+---
+
+## Анимации
+
+| Название | Применение | Описание |
+|----------|-------------|----------|
+| `waveIn` | Появление предмета в игре | Масштабирование с вращением |
+| `shake` | Неправильный ответ | Горизонтальное тряска |
+| `slideIn` | Образовательная карточка | Выезд сверху |
+| `fade-in` | Секции при загрузке | Плавное появление |
+
+---
+
+## Запуск проекта
+
+```bash
+# Клонирование репозитория
+git clone https://github.com/gamr416/arctic_hack.git
+cd arctic_hack
+
+# Запуск локального сервера
+python3 -m http.server 8000
+
+# Открытие в браузере
+# http://localhost:8000
+```
+
+---
+
+## Версионирование
+
+- **Версия:** 1.0.0
+- **Лицензия:** MIT
+- **Статус:** Активный
+
+---
+
+## Источники данных
+
+- plus-one.ru — статистика пластиковых частиц
+- Journal of Marine Science and Engineering — научные исследования
+- Экологическое движение 42 — данные по уборкам
+- Экспедиционные данные — состав мусора
+- OpenStreetMap / CartoDB — картографическая основа
+- Кенозерский национальный парк — координаты и описания
+
+---
+
+## История изменений
+
+- Первая версия: базовый лендинг с картой и игрой
+- Доработка дизайна: новые цвета, улучшенная типографика
+- Добавление GeoJSON: национальный парк, орнитологические территории, зоны загрязнения
+- Обновление игры: бесконечный режим, новые изображения
+- Добавление легенды на карту
+- Финальная оптимизация и документирование
